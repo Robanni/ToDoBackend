@@ -16,7 +16,7 @@ async def register_user(email: str, username: str, password: str, db: AsyncSessi
     try:
         result = await db.execute(query)
     except SQLAlchemyError as e:
-        raise HTTPException(status_code=500, detail="Database error")
+        raise HTTPException(status_code=500, detail=f"Database error  {e}")
     
     existing_user = result.scalars().first()
 

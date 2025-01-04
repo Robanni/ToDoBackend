@@ -6,3 +6,5 @@ class Task(BaseModel):
     description: str
     completed: bool
 
+    class Config:
+        orm_mode = True  # Чтобы Pydantic мог работать с SQLAlchemy моделями

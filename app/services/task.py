@@ -7,9 +7,10 @@ from passlib.context import CryptContext
 from fastapi import HTTPException
 
 from app.models.auth import User
-from app.schemas.task import Task
+from app.schemas.task import Task as Task_Schema
+from app.models.task import Task
 
-async def create_task(username: str, task: Task, db: AsyncSession):
+async def create_task(username: str, task: Task_Schema, db: AsyncSession):
     query = select(User).where(User.username == username)
     try:
         result = await db.execute(query)
@@ -22,6 +23,7 @@ async def create_task(username: str, task: Task, db: AsyncSession):
 
     new_task = Task(title=task.title, description=task.description, completed=task.completed, user_id=existing_user.id)    
 
+    db.add(new_task)
     try:
         await db.commit()
         await db.refresh(new_task)
